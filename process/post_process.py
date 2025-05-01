@@ -1,7 +1,7 @@
 from PIL import Image
 import os
 
-def update_annotation(file_path, y_percent):
+def update_annotation_lines(file_path, y_percent):
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
@@ -18,18 +18,44 @@ def update_annotation(file_path, y_percent):
             x = 2 * float(x) if side == "l" else 2 * float(x) + 0.5
             new_line = vals[0] + " "
             new_line += str(x) + " "
-            new_y =  float(y) * (1 - y_percent) + y_percent
+            new_y = float(y) * (1 - y_percent) + y_percent
             new_line += str(new_y) + " "
-            h = float(h) * (1-y_percent)
+            h = float(h) * (1 - y_percent)
             new_line += w + " " + str(h) + " " + c + "\n"
             new_lines.append(new_line)
     
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.writelines(new_lines)
+    return new_lines
 
 def post_process_annotations(dir, y_percent):
-    for file in os.listdir(dir):
-        update_annotation(f"{dir}/{file}", y_percent)
+    files = os.listdir(dir)
+    processed = set()
+
+    for file in files:
+        if not (file.endswith("_l.txt") or file.endswith("_r.txt")):
+            continue
+
+        base_name = file[:-6]
+        if base_name in processed:
+            continue
+
+        output_lines = []
+        for suffix in ["_l.txt", "_r.txt"]:
+            side_file = base_name + suffix
+            full_path = os.path.join(dir, side_file)
+            if os.path.exists(full_path):
+                output_lines.extend(update_annotation_lines(full_path, y_percent))
+
+        combined_file_path = os.path.join(dir, base_name + ".txt")
+        with open(combined_file_path, 'w', encoding='utf-8') as f:
+            f.writelines(output_lines)
+
+        for suffix in ["_l.txt", "_r.txt"]:
+            side_file = base_name + suffix
+            full_path = os.path.join(dir, side_file)
+            if os.path.exists(full_path):
+                os.remove(full_path)
+
+        processed.add(base_name)
 
 if __name__ == "__main__":
     post_process_annotations("./save/predict4/labels", 0.35)
