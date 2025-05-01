@@ -20,7 +20,8 @@ def update_annotation(file_path, y_percent):
             new_line += str(x) + " "
             new_y =  float(y) * (1 - y_percent) + y_percent
             new_line += str(new_y) + " "
-            new_line += w + " " + h + " " + c + "\n"
+            h = float(h) * (1-y_percent)
+            new_line += w + " " + str(h) + " " + c + "\n"
             new_lines.append(new_line)
     
     with open(file_path, 'w', encoding='utf-8') as f:
