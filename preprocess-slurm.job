@@ -1,0 +1,38 @@
+#!/bin/sh
+
+#SBATCH -N 1        # Allocate 1 nodes for the job
+#SBATCH -c 16       # Idun 20 cores
+#SBATCH -t 16:00:00 # Upper time limit for the job (DD-HH:MM:SS)
+#SBATCH --partition=GPUQ
+#SBATCH --gres=gpu:1  # This reserves 3 a100 gpu
+#SBATCH --mem=32G              # 32 gigabytes memory
+#SBATCH --job-name="yolo_pre"
+#SBATCH --output=yolo_preprocess.txt
+WORKDIR=${SLURM_SUBMIT_DIR}
+cd ${WORKDIR}
+
+#module load intel/2023b
+module load Anaconda3/2022.10
+
+if [ $# -eq 0 ]; then
+	echo "No file arguments"
+	exit 1
+fi
+
+source ./venv/bin/activate
+
+file_path=$1
+remaining_arguments="$@"
+
+for arg in $remaining_arguments; do
+	echo "$arg"
+	if [ "$arg" == "--parallel" ]; then
+		echo "Running parallel with gpu"	
+		NUM_GPUS=$(scontrol show job 20678475 | grep -oP '(?<=gres/gpu=)[0-9]+' | head -1)
+		python $file_path "$NUM_GPUS"
+		exit 0
+	fi
+done
+
+python $file_path
+

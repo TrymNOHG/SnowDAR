@@ -1,0 +1,13 @@
+mode: train
+data: ./Poles/new_rgb/data.yaml
+model: yolo8n.pt
+epochs: 100
+# hsv_h: 0.015
+# hsv_s: 0.4
+hsv_v: 0.5
+# scale: 0.5
+# shear: -10
+# perspective: 0.0005
+fliplr: 0.5
+warmup_epochs: 0
+lr0: 0.01
