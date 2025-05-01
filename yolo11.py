@@ -24,14 +24,14 @@ model = YOLO("yolov8n.pt") # n is the nano-version of the YOLOv11 model and this
 results = model.train(cfg="rgb_train.yaml")
 
 # Evaluate the model's performance on the validation set
-results = model.val()
+# results = model.val()
 
-test_path = "./Poles/rgb/images/test/frame_000005.PNG"
-# Perform object detection on an image using the model
-results = model(test_path)
+# test_path = "./Poles/rgb/images/test/frame_000005.PNG"
+# # Perform object detection on an image using the model
+# results = model(test_path)
 
-img = cv2.imread(test_path)
-save_result_img(results, img)
+# img = cv2.imread(test_path)
+# save_result_img(results, img)
 
 # Export the model to ONNX format
 # success = model.export(format="onnx")

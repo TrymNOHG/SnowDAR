@@ -5,7 +5,7 @@ def update_annotation(file_path, y_percent):
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    side = file_path.split("/")[0].split(".")[0][-1]
+    side = file_path.split("/")[-1].split(".")[0][-1]
 
     new_lines = []
     for line in lines:
