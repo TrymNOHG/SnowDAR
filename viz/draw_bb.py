@@ -24,7 +24,7 @@ def draw_bbox_on_split_images():
         os.makedirs(output_split_dir, exist_ok=True)
 
         for fname in os.listdir(image_split_dir):
-            if not fname.endswith(".PNG"):
+            if not fname.endswith(".png"):
                 continue
 
             base = os.path.splitext(fname)[0]

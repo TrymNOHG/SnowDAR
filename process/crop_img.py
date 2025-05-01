@@ -18,7 +18,8 @@ def update_annotation(label_path, y_percent, output_path):
             new_line += x + " "
             new_y =  (float(y) - y_percent) / (1-y_percent)
             new_line += str(new_y) + " "
-            new_line += w + " " + h + "\n"
+            h = float(h) / (1-y_percent)
+            new_line += w + " " + str(h) + "\n"
             new_lines.append(new_line)
     
     with open(output_path, 'w', encoding='utf-8') as f:
