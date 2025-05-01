@@ -2,17 +2,13 @@ import os
 from PIL import Image, ImageDraw
 
 # Dataset configuration
-rgb_root = "Poles/rgb/"
+rgb_root = "Poles/new_rgb/"
 splits = ["train", "valid", "test"]
 
 # Folder structure
 image_subdir = "split_images"
 label_subdir = "split_labels"
 output_subdir = "debug_overlay"
-
-# Image dimensions after split
-split_image_width = 960
-split_image_height = 1208
 
 def draw_bbox_on_split_images():
     image_dir = os.path.join(rgb_root, image_subdir)
@@ -28,7 +24,7 @@ def draw_bbox_on_split_images():
         os.makedirs(output_split_dir, exist_ok=True)
 
         for fname in os.listdir(image_split_dir):
-            if not fname.endswith(".png"):
+            if not fname.endswith(".PNG"):
                 continue
 
             base = os.path.splitext(fname)[0]
@@ -37,6 +33,7 @@ def draw_bbox_on_split_images():
 
             img = Image.open(img_path).convert("RGB")
             draw = ImageDraw.Draw(img)
+            img_width, img_height = img.size
 
             if os.path.exists(lbl_path):
                 with open(lbl_path, 'r') as f:
@@ -45,10 +42,10 @@ def draw_bbox_on_split_images():
                         if len(parts) != 5:
                             continue
                         _, x, y, w, h = map(float, parts)
-                        x_pix = x * split_image_width
-                        y_pix = y * split_image_height
-                        w_pix = w * split_image_width
-                        h_pix = h * split_image_height
+                        x_pix = x * img_width
+                        y_pix = y * img_height
+                        w_pix = w * img_width
+                        h_pix = h * img_height
 
                         x0 = x_pix - w_pix / 2
                         y0 = y_pix - h_pix / 2
