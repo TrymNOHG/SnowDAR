@@ -1,5 +1,9 @@
 import os
+from dir_traverse import traverse_parallel_dirs
 from PIL import Image
+
+
+
 
 rgb_root = "Poles/new_rgb/"
 splits = ["train", "valid", "test"]
@@ -89,4 +93,5 @@ def split_rgb_dataset():
 
 
 # Run the function
-split_rgb_dataset()
+if __name__ == "__main__":
+    split_rgb_dataset()
