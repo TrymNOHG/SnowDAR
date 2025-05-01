@@ -24,7 +24,7 @@ def split_rgb_dataset():
         os.makedirs(lbl_output_dir, exist_ok=True)
 
         for fname in os.listdir(img_input_dir):
-            if not fname.endswith(".PNG"):
+            if not fname.endswith(".png"):
                 continue
 
             base = os.path.splitext(fname)[0]

@@ -5,6 +5,8 @@ def update_annotation(file_path, y_percent):
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
+    side = file_path.split("/")[0].split(".")[0][-1]
+
     new_lines = []
     for line in lines:
         line = line.strip("\n")
@@ -13,9 +15,9 @@ def update_annotation(file_path, y_percent):
             continue
         else:
             x, y, w, h, c = vals[1:]
-
+            x = 2 * float(x) if side == "l" else 2 * float(x) + 0.5
             new_line = vals[0] + " "
-            new_line += x + " "
+            new_line += str(x) + " "
             new_y =  float(y) * (1 - y_percent) + y_percent
             new_line += str(new_y) + " "
             new_line += w + " " + h + " " + c + "\n"
@@ -27,7 +29,6 @@ def update_annotation(file_path, y_percent):
 def post_process_annotations(dir, y_percent):
     for file in os.listdir(dir):
         update_annotation(f"{dir}/{file}", y_percent)
-
 
 if __name__ == "__main__":
     post_process_annotations("./save/predict4/labels", 0.35)
