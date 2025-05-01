@@ -12,7 +12,7 @@ def update_annotation(file_path, y_percent):
         if len(vals) != 6:
             continue
         else:
-            x, y, w, h = vals[1:]
+            x, y, w, h = vals[1:-1]
             new_line = vals[0] + " "
             new_line += x + " "
             new_y =  float(y) * (1 - y_percent) + y_percent
