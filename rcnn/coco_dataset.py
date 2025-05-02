@@ -17,12 +17,12 @@ class CocoDataset(Dataset):
         self.image_ids = list(self.image_info.keys())
 
 
-        self.imgToAnns = {}
+        self.image_to_annotations = {}
         for ann in self.annotations:
             img_id = ann['image_id']
-            if img_id not in self.imgToAnns:
-                self.imgToAnns[img_id] = []
-            self.imgToAnns[img_id].append(ann)
+            if img_id not in self.image_to_annotations:
+                self.image_to_annotations[img_id] = []
+            self.image_to_annotations[img_id].append(ann)
 
     def __getitem__(self, idx):
         image_id = self.image_ids[idx]
@@ -30,7 +30,7 @@ class CocoDataset(Dataset):
         img_path = os.path.join(self.root, img_info['file_name'])
         img = Image.open(img_path).convert("RGB")
 
-        annots = self.imgToAnns.get(image_id, [])
+        annots = self.image_to_annotations.get(image_id, [])
         boxes = []
         labels = []
         for ann in annots:

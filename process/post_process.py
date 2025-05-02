@@ -63,8 +63,8 @@ def update_coco_annotation_lines(file_path):
         lines = f.readlines()
 
     side = file_path.split("/")[-1].split(".")[0][-1]
-    width, height = (1920, 1208)
-
+    # width, height = (1920, 1208) # rgb
+    width, height = (1024, 128) # lidar
     new_lines = []
     for line in lines:
         line = line.strip("\n")
@@ -73,14 +73,10 @@ def update_coco_annotation_lines(file_path):
             continue
         else:
             x, y, w, h, c = vals[1:]
-            x = float(x) / width
-            y = float(y) / height
+            x = float(x)/width
+            y = float(y)/height
             w = float(w) / width
             h = float(h) / height
-            # x = round(float(x) / width, 4)
-            # y = round(float(y) / height, 4)
-            # w = round(float(w) / width, 4)
-            # h = round(float(h) / height, 4)
             new_line = vals[0] + " "
             new_line += str(x) + " "
             new_line += str(y) + " "
@@ -98,4 +94,4 @@ def post_process_coco_annotations(dir):
 
 if __name__ == "__main__":
     # post_process_annotations("./save/predict5/labels", 0.35)
-    post_process_coco_annotations("./predictions")
+    post_process_coco_annotations("./lidar_val_predictions")
