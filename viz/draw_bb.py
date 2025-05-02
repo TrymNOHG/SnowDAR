@@ -2,12 +2,12 @@ import os
 from PIL import Image, ImageDraw
 
 # Dataset configuration
-rgb_root = "Poles/new_rgb/"
-splits = ["train", "valid", "test"]
+rgb_root = "Poles/"
+splits = ["test"]
 
 # Folder structure
-image_subdir = "split_images"
-label_subdir = "split_labels"
+image_subdir = "rgb/images"
+label_subdir = "coco"
 output_subdir = "debug_overlay"
 
 def draw_bbox_on_split_images():
@@ -24,7 +24,7 @@ def draw_bbox_on_split_images():
         os.makedirs(output_split_dir, exist_ok=True)
 
         for fname in os.listdir(image_split_dir):
-            if not fname.endswith(".png"):
+            if not fname.endswith(".PNG"):
                 continue
 
             base = os.path.splitext(fname)[0]
@@ -39,9 +39,9 @@ def draw_bbox_on_split_images():
                 with open(lbl_path, 'r') as f:
                     for line in f:
                         parts = line.strip().split()
-                        if len(parts) != 5:
+                        if len(parts) != 6:
                             continue
-                        _, x, y, w, h = map(float, parts)
+                        _, x, y, w, h, _ = map(float, parts)
                         x_pix = x * img_width
                         y_pix = y * img_height
                         w_pix = w * img_width

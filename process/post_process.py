@@ -63,7 +63,7 @@ def update_coco_annotation_lines(file_path):
         lines = f.readlines()
 
     side = file_path.split("/")[-1].split(".")[0][-1]
-    width, height = (1960, 1208)
+    width, height = (1920, 1208)
 
     new_lines = []
     for line in lines:
@@ -77,6 +77,10 @@ def update_coco_annotation_lines(file_path):
             y = float(y) / height
             w = float(w) / width
             h = float(h) / height
+            # x = round(float(x) / width, 4)
+            # y = round(float(y) / height, 4)
+            # w = round(float(w) / width, 4)
+            # h = round(float(h) / height, 4)
             new_line = vals[0] + " "
             new_line += str(x) + " "
             new_line += str(y) + " "

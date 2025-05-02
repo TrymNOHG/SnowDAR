@@ -16,10 +16,10 @@ def get_model(num_classes):
 def get_transform():
     return T.Compose([T.ToTensor()])
 
-image_dir = "Poles/rgb"
+image_dir = "Poles/lidar"
 
-train_dataset = CocoDataset(image_dir, 'Poles/coco/train.json', get_transform())
-valid_dataset = CocoDataset(image_dir, 'Poles/coco/valid.json', get_transform())
+train_dataset = CocoDataset(image_dir, 'Poles/lidar_coco/train.json', get_transform())
+valid_dataset = CocoDataset(image_dir, 'Poles/lidar_coco/valid.json', get_transform())
 
 train_loader = DataLoader(train_dataset, batch_size=4, shuffle=True, collate_fn=lambda x: tuple(zip(*x)))
 valid_loader = DataLoader(valid_dataset, batch_size=2, shuffle=False, collate_fn=lambda x: tuple(zip(*x)))
@@ -52,32 +52,32 @@ for epoch in range(num_epochs):
     lr_scheduler.step()
     
     # Just for testing whether my train is working
-    model.eval()
-    img, _ = train_dataset[0]  
-    img_tensor = img.to(device).unsqueeze(0)
+    # model.eval()
+    # img, _ = train_dataset[0]  
+    # img_tensor = img.to(device).unsqueeze(0)
 
-    with torch.no_grad():
-        output = model(img_tensor)[0]
+    # with torch.no_grad():
+    #     output = model(img_tensor)[0]
 
-    img_pil = F.to_pil_image(img)
+    # img_pil = F.to_pil_image(img)
 
-    draw = ImageDraw.Draw(img_pil)
-    boxes = output['boxes'].cpu()
-    scores = output['scores'].cpu()
+    # draw = ImageDraw.Draw(img_pil)
+    # boxes = output['boxes'].cpu()
+    # scores = output['scores'].cpu()
 
-    num_detections = 0
-    for box, score in zip(boxes, scores):
-        if score < 0.05:
-            continue
-        num_detections += 1
-        x1, y1, x2, y2 = box.tolist()
-        draw.rectangle([x1, y1, x2, y2], outline="red", width=2)
-        draw.text((x1, y1), f"{score:.2f}", fill="yellow")
+    # num_detections = 0
+    # for box, score in zip(boxes, scores):
+    #     if score < 0.05:
+    #         continue
+    #     num_detections += 1
+    #     x1, y1, x2, y2 = box.tolist()
+    #     draw.rectangle([x1, y1, x2, y2], outline="red", width=2)
+    #     draw.text((x1, y1), f"{score:.2f}", fill="yellow")
 
-    img_pil.save(f"epoch_{epoch}_check.jpg")
-    print(f"[Epoch {epoch}] Detected {num_detections} boxes on training image.")
+    # img_pil.save(f"epoch_{epoch}_check.jpg")
+    # print(f"[Epoch {epoch}] Detected {num_detections} boxes on training image.")
 
 
 print(f"Epoch {epoch} loss: {losses.item():.4f}")
 
-torch.save(model.state_dict(), "coco_model2.pt")
+torch.save(model.state_dict(), "coco_model_lidar.pt")

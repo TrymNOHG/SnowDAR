@@ -50,7 +50,7 @@ def get_transform():
 
 if __name__ == "__main__":
     image_dir = "./Poles/rgb/"
-    annotation_file = "./Poles/coco/test.json"
+    annotation_file = "./Poles/coco/valid.json"
     model_path = "./coco_model2.pt"
     output_dir = "./predictions"
     conf_threshold = 0.001

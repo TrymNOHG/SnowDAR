@@ -2,12 +2,12 @@ import os
 import json
 from PIL import Image
 
-ROOT_DIR = "Poles/new_rgb"
+ROOT_DIR = "Poles/lidar"
 SPLITS = ["train", "valid", "test"]
 CLASS_NAME = "pole"
 
 def convert_split(split_name):
-    image_dir = os.path.join(ROOT_DIR, "images", split_name)
+    image_dir = os.path.join(ROOT_DIR, "combined_color", split_name)
     label_dir = os.path.join(ROOT_DIR, "labels", split_name)
     output_json = os.path.join(ROOT_DIR, f"{split_name}.json")
 
@@ -49,7 +49,7 @@ def convert_split(split_name):
                 annotations.append({
                     "id": ann_id,
                     "image_id": img_id,
-                    "category_id": int(cls_id),
+                    "category_id": int(cls_id)+1,
                     "bbox": [x_min, y_min, bbox_width, bbox_height],
                     "area": bbox_width * bbox_height,
                     "iscrowd": 0
