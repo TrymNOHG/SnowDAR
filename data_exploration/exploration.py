@@ -58,6 +58,7 @@ rgb_data = "images"
 
 splits = ["train", "test", "valid"]
 
+
 def count_files(base_path, data_folder):
     counts = {}
     for split in splits:
@@ -75,8 +76,6 @@ def count_files(base_path, data_folder):
 def count_dataset_samples():
     lidar_counts = count_files(lidar_root, lidar_data)
     rgb_counts = count_files(rgb_root, rgb_data)
-    # lidar_counts = count_files(lidar_root, "labels")
-    # rgb_counts = count_files(rgb_root, "labels")
 
     print("LiDAR data point counts:")
     for split in splits:
@@ -97,6 +96,7 @@ def parse_label_file(path):
                 x, y, w, h = map(float, parts[1:])
                 poles.append((x, y, w, h))
     return poles
+
 
 def compute_stats(label_dir):
     total_poles = 0
@@ -263,7 +263,7 @@ def plot_pole_centers_with_heights():
         plt.grid(True)
         plt.xlim(0, image_width)
         plt.ylim(0, image_height)
-        ax.invert_yaxis()  # Top-left origin like image
+        ax.invert_yaxis()
         filename = name.lower().replace(" ", "_") + "_centers_with_heights.png"
         plt.savefig(filename, dpi=300)
         plt.close()
@@ -327,7 +327,7 @@ def plot_pole_centers_with_height_and_width(modality="rgb"):
         plt.close()
 
 
-#count_avg_poles_per_image()
-#plot_pole_centers()
-plot_pole_centers_with_height_and_width(modality="lidar")
-
+if __name__ == "__main__":
+    #count_avg_poles_per_image()
+    #plot_pole_centers()
+    plot_pole_centers_with_height_and_width(modality="lidar")

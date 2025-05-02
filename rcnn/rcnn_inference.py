@@ -38,7 +38,9 @@ def evaluate(model, dataset, output_dir, device, conf_threshold=0.5):
                     x1, y1, x2, y2 = box
                     w = x2 - x1
                     h = y2 - y1
-                    line = f"0 {x1:.2f} {y1:.2f} {w:.2f} {h:.2f} {score:.4f}"
+                    x = w/2 + x1
+                    y = h/2 + y1
+                    line = f"0 {x} {y} {w} {h} {score}"
                     lines.append(line)
 
                 with open(txt_path, 'w') as f:
@@ -49,11 +51,11 @@ def get_transform():
 
 
 if __name__ == "__main__":
-    image_dir = "./Poles/rgb/"
-    annotation_file = "./Poles/coco/valid.json"
-    model_path = "./coco_model2.pt"
-    output_dir = "./predictions"
-    conf_threshold = 0.001
+    image_dir = "./Poles/lidar/"
+    annotation_file = "./Poles/lidar_coco/valid.json"
+    model_path = "./coco_model_lidar.pt"
+    output_dir = "./lidar_val_predictions"
+    conf_threshold = 0.5
 
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
