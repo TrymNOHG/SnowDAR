@@ -269,13 +269,21 @@ def plot_pole_centers_with_heights():
         plt.close()
 
 
-def plot_pole_centers_with_height_and_width():
-    image_width = 1920
-    image_height = 1208
+def plot_pole_centers_with_height_and_width(modality="rgb"):
+    if modality == "rgb":
+        image_width = 1920
+        image_height = 1208
+        root = rgb_root
+    elif modality == "lidar":
+        image_width = 1024
+        image_height = 128
+        root = lidar_root
+    else:
+        raise ValueError("Modality must be either 'rgb' or 'lidar'")
 
     datasets = [
-        ("RGB Train", os.path.join(rgb_root, "labels/train")),
-        ("RGB Valid", os.path.join(rgb_root, "labels/valid")),
+        (f"{modality.upper()} Train", os.path.join(root, "labels/train")),
+        (f"{modality.upper()} Valid", os.path.join(root, "labels/valid")),
     ]
 
     for name, label_dir in datasets:
@@ -284,7 +292,7 @@ def plot_pole_centers_with_height_and_width():
 
         plt.figure(figsize=(10, 6))
         ax = plt.gca()
-        ax.axvline(x=960, color='green', linestyle='--', linewidth=1, label='split')
+        ax.axvline(x=image_width / 2, color='green', linestyle='--', linewidth=1, label='split')
 
         for file in os.listdir(label_dir):
             path = os.path.join(label_dir, file)
@@ -313,6 +321,7 @@ def plot_pole_centers_with_height_and_width():
         plt.xlim(0, image_width)
         plt.ylim(0, image_height)
         ax.invert_yaxis()
+
         filename = name.lower().replace(" ", "_") + "_centers_with_bars.png"
         plt.savefig(filename, dpi=300)
         plt.close()
@@ -320,4 +329,5 @@ def plot_pole_centers_with_height_and_width():
 
 #count_avg_poles_per_image()
 #plot_pole_centers()
-plot_pole_centers_with_height_and_width()
+plot_pole_centers_with_height_and_width(modality="lidar")
+
