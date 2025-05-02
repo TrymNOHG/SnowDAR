@@ -16,7 +16,7 @@ def save_result_img(results, img, rectangle_thickness=2, text_thickness=1):
 #    return img, results
 
 # Load a pretrained YOLO model (recommended for training)
-model = YOLO("yolov8n.pt") # n is the nano-version of the YOLOv11 model and this one is specifically for object detection.
+model = YOLO("yolov9e.pt") # n is the nano-version of the YOLOv11 model and this one is specifically for object detection.
 
 # Ultralytics uses a yaml file to specify the location of the datasets. I might need to specify the pre-processing steps in this yaml file.
 

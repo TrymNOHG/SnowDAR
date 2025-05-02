@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 # Load a model
-model = YOLO("./runs/detect/train12/weights/best.pt")  # pretrained YOLO11n model
+model = YOLO("./runs/detect/train14/weights/best.pt")  # pretrained YOLO11n model
 
 
 model.predict(

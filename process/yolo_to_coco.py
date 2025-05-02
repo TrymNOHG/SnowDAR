@@ -2,21 +2,20 @@ import os
 import json
 from PIL import Image
 
-ROOT_DIR = "Poles/rgb"
+ROOT_DIR = "Poles/new_rgb"
 SPLITS = ["train", "valid", "test"]
 CLASS_NAME = "pole"
-
 
 def convert_split(split_name):
     image_dir = os.path.join(ROOT_DIR, "images", split_name)
     label_dir = os.path.join(ROOT_DIR, "labels", split_name)
     output_json = os.path.join(ROOT_DIR, f"{split_name}.json")
 
-    image_files = [f for f in os.listdir(image_dir) if f.endswith((".jpg", ".jpeg", ".png"))]
+    image_files = [f for f in os.listdir(image_dir) if f.lower().endswith((".jpg", ".jpeg", ".png"))]
 
     images = []
     annotations = []
-    categories = [{"id": 0, "name": CLASS_NAME}]
+    categories = [{"id": 1, "name": CLASS_NAME}]
     ann_id = 0
 
     for img_id, file_name in enumerate(sorted(image_files)):
@@ -28,7 +27,7 @@ def convert_split(split_name):
 
         images.append({
             "id": img_id,
-            "file_name": file_name,
+            "file_name": os.path.join("images", split_name, file_name),
             "width": width,
             "height": height
         })
@@ -50,7 +49,7 @@ def convert_split(split_name):
                 annotations.append({
                     "id": ann_id,
                     "image_id": img_id,
-                    "category_id": 0,
+                    "category_id": int(cls_id),
                     "bbox": [x_min, y_min, bbox_width, bbox_height],
                     "area": bbox_width * bbox_height,
                     "iscrowd": 0
@@ -65,9 +64,7 @@ def convert_split(split_name):
 
     with open(output_json, "w") as f:
         json.dump(coco_dict, f, indent=2)
-    print(f"[✓] Saved {split_name}.json with {len(images)} images and {len(annotations)} annotations.")
+    print(f"Saved {split_name}.json with {len(images)} images and {len(annotations)} annotations.")
 
-
-# Run conversion for all splits
 for split in SPLITS:
     convert_split(split)

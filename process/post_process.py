@@ -15,7 +15,7 @@ def update_annotation_lines(file_path, y_percent):
             continue
         else:
             x, y, w, h, c = vals[1:]
-            x = 2 * float(x) if side == "l" else 2 * float(x) + 0.5
+            x = float(x) / 2 if side == "l" else float(x) / 2 + 0.5
             new_line = vals[0] + " "
             new_line += str(x) + " "
             new_y = float(y) * (1 - y_percent) + y_percent
@@ -57,5 +57,41 @@ def post_process_annotations(dir, y_percent):
 
         processed.add(base_name)
 
+
+def update_coco_annotation_lines(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    side = file_path.split("/")[-1].split(".")[0][-1]
+    width, height = (1960, 1208)
+
+    new_lines = []
+    for line in lines:
+        line = line.strip("\n")
+        vals = line.split(" ")
+        if len(vals) != 6:
+            continue
+        else:
+            x, y, w, h, c = vals[1:]
+            x = float(x) / width
+            y = float(y) / height
+            w = float(w) / width
+            h = float(h) / height
+            new_line = vals[0] + " "
+            new_line += str(x) + " "
+            new_line += str(y) + " "
+            new_line += str(w) + " " + str(h) + " " + c + "\n"
+            new_lines.append(new_line)
+
+    with open(file_path, 'w', encoding='utf-8') as f:
+            f.writelines(new_lines)
+
+def post_process_coco_annotations(dir):
+    files = os.listdir(dir)
+    for file in files:
+        file_path = os.path.join(dir, file)
+        update_coco_annotation_lines(file_path)
+
 if __name__ == "__main__":
-    post_process_annotations("./save/predict4/labels", 0.35)
+    # post_process_annotations("./save/predict5/labels", 0.35)
+    post_process_coco_annotations("./predictions")
