@@ -6,8 +6,8 @@
 #SBATCH --partition=GPUQ
 #SBATCH --gres=gpu:1  # This reserves 3 a100 gpu
 #SBATCH --mem=32G              # 32 gigabytes memory
-#SBATCH --job-name="yolo_inf"
-#SBATCH --output=yolo_train.txt
+#SBATCH --job-name="coco_train"
+#SBATCH --output=coco_train3.txt
 WORKDIR=${SLURM_SUBMIT_DIR}
 cd ${WORKDIR}
 

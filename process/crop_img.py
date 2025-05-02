@@ -1,19 +1,6 @@
 from PIL import Image
+from dir_traverse import traverse_parallel_dirs
 import os
-
-def traverse_parallel_dirs(images_dir, labels_dir):
-    for root, _, files in os.walk(images_dir):
-        for file in files:
-            _, ext = os.path.splitext(file)
-            if ".png" in ext.lower():
-                relative_path = os.path.relpath(os.path.join(root, file), images_dir)
-                label_path = os.path.join(labels_dir, os.path.splitext(relative_path)[0] + ".txt")
-                image_path = os.path.join(images_dir, relative_path)
-                if os.path.exists(label_path):
-                    yield image_path, label_path
-                else:
-                    yield image_path, None
-
 
 def update_annotation(label_path, y_percent, output_path):
     with open(label_path, 'r', encoding='utf-8') as f:
@@ -31,7 +18,8 @@ def update_annotation(label_path, y_percent, output_path):
             new_line += x + " "
             new_y =  (float(y) - y_percent) / (1-y_percent)
             new_line += str(new_y) + " "
-            new_line += w + " " + h + "\n"
+            h = float(h) / (1-y_percent)
+            new_line += w + " " + str(h) + "\n"
             new_lines.append(new_line)
     
     with open(output_path, 'w', encoding='utf-8') as f:
